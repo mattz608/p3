@@ -3,6 +3,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     /* Instance variables and constructors
      */
 
+    public HashTable(int initialCapacity, double loadFactor) {
+        
+    }
+    
     @Override
     public V put(K key, V value) {
         //TODO: Implement put method - using efficient algorithm
