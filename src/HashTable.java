@@ -33,6 +33,11 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
             ht.get(index).add(key);
         }
         numItems++;
+        LF = numItems/ht.size();
+        if(LF > .75)
+        {
+            this.resize();
+        }
         
         return null;
     }
@@ -53,10 +58,8 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
                 multiply = true;
                 index = 1;
             }
-            
         }
-        
-        
+        index = index%ht.size();
         return index;
     }
 
