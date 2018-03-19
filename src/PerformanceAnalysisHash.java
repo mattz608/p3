@@ -4,22 +4,53 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 public class PerformanceAnalysisHash implements PerformanceAnalysis {
-
-    // The input data from each file is stored in this/ per file
+    
+    /**
+     * Line by line data from the current data file being worked in
+     */
     private ArrayList<String> inputData;
+    
+    /**
+     * This is actually the path to the data files
+     */
     private String dataFile;
+    
+    /**
+     * All file names that will be compared
+     */
     private ArrayList<String> fileNames;
+    
+    /**
+     * Feedback from every test done to every file
+     */
     private ArrayList<String> testData;
+    
+    /**
+     * The hash table we made for testing. Re-referenced for each file tested
+     */
     private HashTable<Object,Object> hashTable;
+    
+    /**
+     * The hash table being compared to that's built in. Also re-referenced
+     * for each file tested
+     */
     private TreeMap<Object,Object> treeMap;
+    
+    /**
+     * The current data file being read from so that it can be recorded in testData
+     */
     private String currentFileName;
 
+    /**
+     * Initializes some fields and processes the details file given. It uses
+     * this path to read a file containing the file names to be tested.
+     * @param details_filename the path to the relevant files for testing
+     */
     public PerformanceAnalysisHash(String details_filename) {
         try {
             // A couple initiations
             inputData = new ArrayList<String>();
             testData = new ArrayList<String>();
-
             
             // Find details file and add lines to an ArrayList
             File details = new File(details_filename);
@@ -45,14 +76,19 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         
     }
     
+    /**
+     * Goes through every file and runs the get, search and remove methods on them.
+     */
     @Override
     public void compareDataStructures() {
         try {
             for (String s : fileNames) {
+                // Reset local references
                 System.out.println("Trying " + s);
                 currentFileName = s;
                 hashTable = new HashTable<Object,Object>(100000000,0.75);
                 treeMap = new TreeMap<Object,Object>();
+                // new loadData method call will populate appropriate inputData
                 inputData.clear();
                 
                 System.out.println("Loading Data...");
@@ -71,13 +107,16 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         }
     }
 
+    /**
+     * Gives a detailed report for all the different files tested for each operation.
+     */
     @Override
     public void printReport() {
         System.out.println("The report name : Performance Analysis Report");
         System.out.println("------------------------------------------------------------------------------------------------ ");
         System.out.println("|            FileName|      Operation| Data Structure|   Time Taken (micro sec)|     Bytes Used|");
         System.out.println("------------------------------------------------------------------------------------------------ ");
-        for (String s : testData) {
+        for (String s : testData) { // Every entry is a detailed report
             String[] data = s.split(",");
             String fileName = data[0];
             String operation = data[1];
@@ -88,9 +127,14 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         }
         System.out.println("------------------------------------------------------------------------------------------------- ");
     }
-// |            FileName|      Operation| Data Structure|   Time Taken (micro sec)|     Bytes Used|
+    
+    /**
+     * Records data for the way that our HashTable and Java's TreeMap handles inserting data
+     * from a certain file.
+     */
     @Override
     public void compareInsertion() {
+        // Set up start memory and time references
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         long startMemory = runtime.totalMemory() - runtime.freeMemory();
@@ -100,6 +144,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
             hashTable.put(e, null);
         }
         
+        // Compare memory and time difference
         long memoryUsed = (runtime.totalMemory() - runtime.freeMemory()) - startMemory;
         long timeElapsed = (System.nanoTime() - startTime)*1000;
         testData.add(currentFileName + ", " + "PUT, HASHTABLE, " + timeElapsed + ", " + memoryUsed);
@@ -120,13 +165,49 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         
     }
 
+    /**
+     * Records data for the way that our HashTable and Java's TreeMap handles deleting data
+     * from a certain file.
+     */
     @Override
     public void compareDeletion() {
-        //TODO: Complete this method
+     // Set up start memory and time references
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc();
+        long startMemory = runtime.totalMemory() - runtime.freeMemory();
+        long startTime = System.nanoTime();
+        
+        for (String e : inputData) {
+            hashTable.remove(e);
+        }
+        
+        // Compare memory and time difference
+        long memoryUsed = (runtime.totalMemory() - runtime.freeMemory()) - startMemory;
+        long timeElapsed = (System.nanoTime() - startTime)*1000;
+        testData.add(currentFileName + ", " + "REMOVE, HASHTABLE, " + timeElapsed + ", " + memoryUsed);
+        
+         // Repeat for TreeMap
+        
+        runtime.gc();
+        startMemory = runtime.totalMemory() - runtime.freeMemory();
+        startTime = System.nanoTime();
+        
+        for (String e : inputData) {
+            treeMap.remove(e);
+        }
+        
+        memoryUsed = (runtime.totalMemory() - runtime.freeMemory()) - startMemory;
+        timeElapsed = (System.nanoTime() - startTime)*1000;
+        testData.add(currentFileName + ", " + "REMOVE, TREEMAP, " + timeElapsed + ", " + memoryUsed);
     }
 
+    /**
+     * Records data for the way that our HashTable and Java's TreeMap handles searches data
+     * from a certain file.
+     */
     @Override
     public void compareSearch() {
+        // Set up start memory and time references
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         long startMemory = runtime.totalMemory() - runtime.freeMemory();
@@ -136,6 +217,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
             hashTable.get(e);
         }
         
+        // Compare memory and time difference
         long memoryUsed = (runtime.totalMemory() - runtime.freeMemory()) - startMemory;
         long timeElapsed = (System.nanoTime() - startTime)*1000;
         testData.add(currentFileName + ", " + "GET, HASHTABLE, " + timeElapsed + ", " + memoryUsed);
@@ -155,7 +237,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         testData.add(currentFileName + ", " + "GET, TREEMAP, " + timeElapsed + ", " + memoryUsed);
     }
 
-    /*
+    /**
     An implementation of loading files into local data structure is provided to you
     Please feel free to make any changes if required as per your implementation.
     However, this function can be used as is.

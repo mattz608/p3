@@ -51,13 +51,14 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     @Override
     public V put(K key, V value) {
         if(key == null) throw new NullPointerException();
+        
         int index = this.hashFunction(key);
-        if (ht.get(index) == null) {
+        if (ht.get(index) == null) { // No bucket yet
             System.out.println("Worked");
             ArrayList<K> bucket = new ArrayList<K>();
             bucket.add(key);
             ht.set(index, bucket);
-        } else {
+        } else { // Element at index exists, append bucket
             ht.get(index).add(key);
             System.out.println("Bucket size: " + ht.get(index).size() + " for index: " + index);
         }
@@ -75,14 +76,18 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      * instance of the class has a reference for.
      */
     private void resize() {
+        // old hash table copied to a separate array list
         ArrayList<ArrayList<K>> oldHT = new ArrayList<ArrayList<K>>();
         for (ArrayList<K> a : ht) oldHT.add(a);
+        
+        // clear and resize local hash table
         int size = ht.size();
         ht.clear();
         for (int i = 0; i < size*2; i++) {
             ht.add(null);
         }
         
+        // Rehash the local hash table using the old "copy"
         for (ArrayList<K> a : oldHT) {
             if (a != null) {
                 for (K key : a) {
@@ -137,12 +142,12 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      */
     @Override
     public V get(K key) {
-        boolean found = false;
+        boolean found = false; // Assume no success
         int index = this.hashFunction(key);
         if (ht.get(index) != null) {
-            for (K k : ht.get(index)) {
+            for (K k : ht.get(index)) { // traverse bucket
                 if (k.equals(key)) {
-                    found = true;
+                    found = true; // Only if success
                 }
             }
         }
