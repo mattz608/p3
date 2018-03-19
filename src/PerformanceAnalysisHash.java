@@ -5,26 +5,44 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 
     // The input data from each file is stored in this/ per file
     private ArrayList<String> inputData;
-    
-    public PerformanceAnalysisHash() {
-    }
+    private String fileName;
+    private ArrayList<String> testData;
 
     public PerformanceAnalysisHash(String details_filename) {
-        //TODO: Save the details of the test data files
+        fileName = details_filename;
+        try {
+            loadData(details_filename);
+        } catch (IOException e) {
+            
+        }
     }
     @Override
     public void compareDataStructures() {
-        //TODO: Complete this function which compares the ds and generates the details
+        compareInsertion();
+        compareSearch();
+        compareDeletion();
     }
 
     @Override
     public void printReport() {
         //TODO: Complete this method
     }
-
+// |            FileName|      Operation| Data Structure|   Time Taken (micro sec)|     Bytes Used|
     @Override
     public void compareInsertion() {
-        //TODO: Complete this method
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc();
+        long memory = runtime.totalMemory() - runtime.freeMemory();
+        long start = System.nanoTime();
+        
+        HashTable<String,String> ht = new HashTable<String,String>(100,0.75);
+        for (String e : inputData) {
+            ht.put(e, null);
+        }
+        long memoryUsed = memory - (runtime.totalMemory() - runtime.freeMemory());
+        long timeElapsed = start - System.nanoTime();
+        testData.add(fileName + ", " + "PUT, HASHTABLE, " + timeElapsed + ", " + memoryUsed);
+        
     }
 
     @Override
