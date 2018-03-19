@@ -42,6 +42,25 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         return null;
     }
     
+    private void resize()
+    {
+        ArrayList<ArrayList<K>> oldHT = new ArrayList<ArrayList<K>>();
+        for(ArrayList<K> a : ht) oldHT.add(a);
+        ht.clear();
+        int size = ht.size();
+        for (int i = 0; i < size; i++) {
+            ht.add(null);
+        }
+        
+        for (ArrayList<K> a : oldHT) {
+            if (a != null) {
+                for (K key : a) {
+                    put(key,null);
+                }
+            }
+        }
+    }
+    
     private int hashFunction(K key) {
         String s = key.toString();
         int index = 1;
@@ -60,6 +79,27 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
             }
         }
         index = index%ht.size();
+        return index;
+    }
+    
+    private int hashFunction(K key, int tableSize) {
+        String s = key.toString();
+        int index = 1;
+        boolean multiply = true;
+        int compareNum;
+        
+        for (int i = 0; i < s.length(); i++) {
+            compareNum = Math.abs("a".compareTo(s.substring(i, i+1)));
+            if (compareNum != 0 && multiply) index *= compareNum;
+            else if (compareNum != 0 && !multiply) index /= compareNum;
+            
+            if (index == Integer.MAX_VALUE) multiply = false;
+            else if (index == 0) {
+                multiply = true;
+                index = 1;
+            }
+        }
+        index = index%tableSize;
         return index;
     }
 
