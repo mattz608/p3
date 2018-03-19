@@ -7,13 +7,15 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     int numItems = 0;
     private ArrayList<ArrayList<K>> ht;
     double LF = 0;
-
+    double maxLF;
+    
     public HashTable(int initialCapacity, double loadFactor) {
         ht = new ArrayList<ArrayList<K>>();
         for(int i = 0; i < initialCapacity; i++)
         {
             ht.add(null);
         }
+        maxLF = loadFactor;
     }
     
     @Override
@@ -35,7 +37,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         }
         numItems++;
         LF = numItems/ht.size();
-        if(LF > .75)
+        if(LF > maxLF)
         {
             this.resize();
         }
