@@ -101,6 +101,8 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
                 System.out.println("Comparing Deletion...");
                 compareDeletion();
                 System.out.println();
+                hashTable.clear();
+                treeMap.clear();
             }  
         } catch (IOException e) {
             

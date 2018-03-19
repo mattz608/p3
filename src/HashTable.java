@@ -54,7 +54,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         
         int index = this.hashFunction(key);
         if (ht.get(index) == null) { // No bucket yet
-            System.out.println("Worked");
+            //System.out.println("Worked");
             ArrayList<K> bucket = new ArrayList<K>();
             bucket.add(key);
             ht.set(index, bucket);
@@ -115,9 +115,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         for (int i = 0; i < s.length(); i++) {
             compareNum = Math.abs("a".compareTo(s.substring(i, i+1)));
 
-            if (compareNum != 0 && add) index += compareNum*primeNumbers[i%pLength];
-            else if (compareNum != 0 && !add) index -= compareNum*primeNumbers[i%pLength];
+            if (compareNum != 0 && add) index += compareNum*((int)Math.pow(primeNumbers[i%pLength],i));
+            else if (compareNum != 0 && !add) index -= compareNum*(int)Math.pow(primeNumbers[i%pLength],i);
             
+            index = Math.abs(index);
             if (index == Integer.MAX_VALUE) add = false;
             else if (index == 0) {
                 add = true;
