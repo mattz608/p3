@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class HashTable<K, V> implements HashTableADT<K, V> {
     /* Instance variables and constructors
@@ -82,27 +83,6 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         return index;
     }
     
-    private int hashFunction(K key, int tableSize) {
-        String s = key.toString();
-        int index = 1;
-        boolean multiply = true;
-        int compareNum;
-        
-        for (int i = 0; i < s.length(); i++) {
-            compareNum = Math.abs("a".compareTo(s.substring(i, i+1)));
-            if (compareNum != 0 && multiply) index *= compareNum;
-            else if (compareNum != 0 && !multiply) index /= compareNum;
-            
-            if (index == Integer.MAX_VALUE) multiply = false;
-            else if (index == 0) {
-                multiply = true;
-                index = 1;
-            }
-        }
-        index = index%tableSize;
-        return index;
-    }
-
     @Override
     public void clear() {
        for(int i = 0; i < ht.size(); i++)
@@ -113,7 +93,18 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     @Override
     public V get(K key) {
-//        V val = ht.get();
+        boolean found = false;
+        int index = this.hashFunction(key);
+        if (ht.get(index) != null) {
+            for (K k : ht.get(index)) {
+                if (k.equals(key)) {
+                    found = true;
+                }
+            }
+        }
+        
+        if (!found) throw new NoSuchElementException();
+        
         return null;
     }
 
@@ -124,7 +115,11 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     @Override
     public V remove(K key) {
-       //TODO: Implement the remove method
+       if (key == null) throw new NullPointerException();
+       int index = this.hashFunction(key);
+       ht.get(index).remove(key);
+       
+       numItems--;
         return null;
     }
 
