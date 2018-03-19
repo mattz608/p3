@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class HashTable<K, V> implements HashTableADT<K, V> {
     /* Instance variables and constructors
@@ -92,7 +93,18 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     @Override
     public V get(K key) {
-//        V val = ht.get();
+        boolean found = false;
+        int index = this.hashFunction(key);
+        if (ht.get(index) != null) {
+            for (K k : ht.get(index)) {
+                if (k.equals(key)) {
+                    found = true;
+                }
+            }
+        }
+        
+        if (!found) throw new NoSuchElementException();
+        
         return null;
     }
 
@@ -103,7 +115,11 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     @Override
     public V remove(K key) {
-       //TODO: Implement the remove method
+       if (key == null) throw new NullPointerException();
+       int index = this.hashFunction(key);
+       ht.get(index).remove(key);
+       
+       numItems--;
         return null;
     }
 
