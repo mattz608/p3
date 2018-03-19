@@ -1,6 +1,19 @@
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
+///////////////////////////////////////////////////////////////////////////////
+//Title:            P3
+//Files:            Hash Table.java, PerformanceAnalysisTest.java, AnalysisTest.java, 
+//                  HashTableADT.java, PerformanceAnalysis.java
+//Semester:         CS 400 Spring 2018
+//
+//Authors:          Matt Zimmers, Tarun Mandalapu
+//Email:            tmandalapu@wisc.edu, mzimmers@wisc.edu
+//Lecturer's Name:  Debra Deppeler
+//Source Credits:   
+//Known Bugs:       bytes used differs greatly from sample file (might be due to our implementation)_
+///////////////////////////////////////////////////////////////////////////////
+
 public class HashTable<K, V> implements HashTableADT<K, V> {
     
     /**
@@ -13,7 +26,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      * ArrayLists as buckets when the hash function yields the same
      * index for a given key
      */
-    private ArrayList<ArrayList<K>> ht;
+    private ArrayList<ArrayList<kvHolder>> ht;
     
     /**
      * The current load factor of the hash table
@@ -25,6 +38,31 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      */
     private double maxLF;
     
+    protected class kvHolder {
+        private K key;
+        private V val;
+        public kvHolder(K k, V v)
+        {
+            this.key = k;
+            this.val = v;
+        }
+        public K getKey()
+        {
+            return key;
+        }
+        public V getVal()
+        {
+            return val;
+        }
+        public void setKey(K newKey)
+        {
+            this.key = newKey;
+        }
+        public void setVal(V newVal)
+        {
+            this.val = newVal;
+        }
+    }
     /**
      * Sets up the hash table and establishes the load factor rule for it
      * @param initialCapacity specifies the amount of null values that will
@@ -33,7 +71,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      * before resizing
      */
     public HashTable(int initialCapacity, double loadFactor) {
-        ht = new ArrayList<ArrayList<K>>();
+        ht = new ArrayList<ArrayList<kvHolder>>();
         
         // Add null values until initial capacity reached
         for(int i = 0; i < initialCapacity; i++) {
@@ -53,13 +91,14 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         if(key == null) throw new NullPointerException();
         
         int index = this.hashFunction(key);
+        kvHolder kv = new kvHolder(key, value);
         if (ht.get(index) == null) { // No bucket yet
             //System.out.println("Worked");
-            ArrayList<K> bucket = new ArrayList<K>();
-            bucket.add(key);
+            ArrayList<kvHolder> bucket = new ArrayList<kvHolder>();
+            bucket.add(kv);
             ht.set(index, bucket);
         } else { // Element at index exists, append bucket
-            ht.get(index).add(key);
+            ht.get(index).add(kv);
             //System.out.println("Bucket size: " + ht.get(index).size() + " for index: " + index);
         }
         numItems++;
@@ -77,8 +116,8 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      */
     private void resize() {
         // old hash table copied to a separate array list
-        ArrayList<ArrayList<K>> oldHT = new ArrayList<ArrayList<K>>();
-        for (ArrayList<K> a : ht) oldHT.add(a);
+        ArrayList<ArrayList<kvHolder>> oldHT = new ArrayList<ArrayList<kvHolder>>();
+        for (ArrayList<kvHolder> a : ht) oldHT.add(a);
         
         // clear and resize local hash table
         int size = ht.size();
@@ -88,10 +127,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         }
         
         // Rehash the local hash table using the old "copy"
-        for (ArrayList<K> a : oldHT) {
+        for (ArrayList<kvHolder> a : oldHT) {
             if (a != null) {
-                for (K key : a) {
-                    put(key,null);
+                for (kvHolder kv : a) {
+                    put(kv.getKey(),kv.getVal());
                 }
             }
         }
@@ -146,19 +185,15 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      */
     @Override
     public V get(K key) {
-        boolean found = false; // Assume no success
         int index = this.hashFunction(key);
         if (ht.get(index) != null) {
-            for (K k : ht.get(index)) { // traverse bucket
-                if (k.equals(key)) {
-                    found = true; // Only if success
+            for (kvHolder kv : ht.get(index)) { // traverse bucket
+                if (kv.getKey().equals(key)) {
+                    return kv.getVal();
                 }
             }
         }
-        
-        if (!found) throw new NoSuchElementException();
-        
-        return null;
+        throw new NoSuchElementException();
     }
 
     /**
@@ -178,10 +213,19 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     public V remove(K key) {
        if (key == null) throw new NullPointerException();
        int index = this.hashFunction(key);
-       ht.get(index).remove(key);
-       
+       ArrayList<kvHolder> bucket = ht.get(index);
+       V result = null;
+       if (bucket != null) {
+           for (kvHolder kv : bucket) { // traverse bucket
+               if (kv.getKey().equals(key)) {
+                   bucket.remove(kv);
+                   result = kv.getVal();
+                   break;
+               }
+           }
+       }
        numItems--;
-        return null;
+       return result;
     }
 
     /**
