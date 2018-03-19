@@ -2,6 +2,7 @@
 public class HashTable<K, V> implements HashTableADT<K, V> {
     /* Instance variables and constructors
      */
+    int numItems = 0;
 
     public HashTable(int initialCapacity, double loadFactor) {
         
@@ -26,8 +27,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     @Override
     public boolean isEmpty() {
-        //TODO: Implement the method
-        return true;
+        return (this.numItems == 0);
     }
 
     @Override
@@ -38,7 +38,6 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     @Override
     public int size() {
-        //TODO: Implement this method
-        return 0;
+        return this.numItems;
     }
 }
