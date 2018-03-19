@@ -6,10 +6,10 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     // The input data from each file is stored in this/ per file
     private ArrayList<String> inputData;
     
-    public PerformanceAnalysisHash(){
+    public PerformanceAnalysisHash() {
     }
 
-    public PerformanceAnalysisHash(String details_filename){
+    public PerformanceAnalysisHash(String details_filename) {
         //TODO: Save the details of the test data files
     }
     @Override

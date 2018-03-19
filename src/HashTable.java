@@ -82,27 +82,6 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         return index;
     }
     
-    private int hashFunction(K key, int tableSize) {
-        String s = key.toString();
-        int index = 1;
-        boolean multiply = true;
-        int compareNum;
-        
-        for (int i = 0; i < s.length(); i++) {
-            compareNum = Math.abs("a".compareTo(s.substring(i, i+1)));
-            if (compareNum != 0 && multiply) index *= compareNum;
-            else if (compareNum != 0 && !multiply) index /= compareNum;
-            
-            if (index == Integer.MAX_VALUE) multiply = false;
-            else if (index == 0) {
-                multiply = true;
-                index = 1;
-            }
-        }
-        index = index%tableSize;
-        return index;
-    }
-
     @Override
     public void clear() {
        for(int i = 0; i < ht.size(); i++)
