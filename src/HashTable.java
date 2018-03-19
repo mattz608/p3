@@ -1,16 +1,26 @@
+import java.util.ArrayList;
 
 public class HashTable<K, V> implements HashTableADT<K, V> {
     /* Instance variables and constructors
      */
     int numItems = 0;
+    private ArrayList<K> ht;
+    
 
     public HashTable(int initialCapacity, double loadFactor) {
-        
+        ht = new ArrayList<K>();
+        for(int i = 0; i < initialCapacity; i++)
+        {
+            ht.add(null);
+        }
     }
     
     @Override
     public V put(K key, V value) {
-        //TODO: Implement put method - using efficient algorithm
+        if(key == null)
+        {
+            throw new NullPointerException();
+        }
         return null;
     }
 
@@ -21,7 +31,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     @Override
     public V get(K key) {
-        //TODO: Implement the get method
+//        V val = ht.get();
         return null;
     }
 
