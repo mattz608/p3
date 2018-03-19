@@ -60,7 +60,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
             ht.set(index, bucket);
         } else { // Element at index exists, append bucket
             ht.get(index).add(key);
-            System.out.println("Bucket size: " + ht.get(index).size() + " for index: " + index);
+            //System.out.println("Bucket size: " + ht.get(index).size() + " for index: " + index);
         }
         numItems++;
         LF = (double)numItems/ht.size();

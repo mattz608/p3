@@ -1,7 +1,20 @@
 import java.io.*;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
+///////////////////////////////////////////////////////////////////////////////
+//Title:            P3
+//Files:            Hash Table.java, PerformanceAnalysisTest.java, AnalysisTest.java, 
+//HashTableADT.java, PerformanceAnalysis.java
+//Semester:         CS 400 Spring 2018
+//
+//Authors:          Matt Zimmers, Tarun Mandalapu
+//Email:            tmandalapu@wisc.edu, mzimmers@wisc.edu
+//Lecturer's Name:  Debra Deppeler
+//Source Credits:   
+//Known Bugs:       bytes used differs greatly from sample file
+///////////////////////////////////////////////////////////////////////////////
 
 public class PerformanceAnalysisHash implements PerformanceAnalysis {
     
