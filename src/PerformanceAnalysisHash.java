@@ -131,16 +131,30 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         System.out.println("------------------------------------------------------------------------------------------------ ");
         System.out.println("|            FileName|      Operation| Data Structure|   Time Taken (micro sec)|     Bytes Used|");
         System.out.println("------------------------------------------------------------------------------------------------ ");
-        for (String s : testData) { // Every entry is a detailed report
-            String[] data = s.split(",");
-            String fileName = data[0];
-            String operation = data[1];
-            String dataStruct = data[2];
-            String time = data[3];
-            String bytes = data[4];
-            System.out.printf("|%20s|%15s|%15s|%25s|%15s\n", fileName,operation,dataStruct,time,bytes);
+        PrintWriter pw;
+        try {
+            pw = new PrintWriter(new FileWriter(new File ("results.txt")), true);     
+            pw.println("The report name : Performance Analysis Report");
+            pw.println("------------------------------------------------------------------------------------------------ ");
+            pw.println("|            FileName|      Operation| Data Structure|   Time Taken (micro sec)|     Bytes Used|");
+            pw.println("------------------------------------------------------------------------------------------------ ");
+            for (String s : testData) { // Every entry is a detailed report
+                String[] data = s.split(",");
+                String fileName = data[0];
+                String operation = data[1];
+                String dataStruct = data[2];
+                String time = data[3];
+                String bytes = data[4];
+                System.out.printf("|%20s|%15s|%15s|%25s|%15s|\n", fileName,operation,dataStruct,time,bytes);
+                pw.printf("|%20s|%15s|%15s|%25s|%15s|\n", fileName,operation,dataStruct,time,bytes);
+            }
+            System.out.println("------------------------------------------------------------------------------------------------- ");
+            pw.println("------------------------------------------------------------------------------------------------- ");
+            pw.close();
+            
+        } catch (Exception e) {
+            
         }
-        System.out.println("------------------------------------------------------------------------------------------------- ");
     }
     
     /**
