@@ -4,11 +4,11 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     /* Instance variables and constructors
      */
     int numItems = 0;
-    private ArrayList<K> ht;
+    private ArrayList<ArrayList<K>> ht;
     
 
     public HashTable(int initialCapacity, double loadFactor) {
-        ht = new ArrayList<K>();
+        ht = new ArrayList<ArrayList<K>>();
         for(int i = 0; i < initialCapacity; i++)
         {
             ht.add(null);
@@ -20,6 +20,13 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         if(key == null)
         {
             throw new NullPointerException();
+        }
+        int index = this.hashFunction(key);
+        if(ht.get(index) == null)
+        {
+            ArrayList<K> bucket = new ArrayList<K>();
+            bucket.add(key);
+            ht.set(index, bucket);
         }
         return null;
     }
