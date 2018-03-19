@@ -104,20 +104,23 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      * @return the index forumated as a result of the key
      */
     private int hashFunction(K key) {
+        int[] primeNumbers = new int[] { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47 };
+        int pLength = primeNumbers.length;
+        
         String s = key.toString();
         int index = 1;
-        boolean multiply = true;
+        boolean add = true;
         int compareNum;
         
         for (int i = 0; i < s.length(); i++) {
             compareNum = Math.abs("a".compareTo(s.substring(i, i+1)));
 
-            if (compareNum != 0 && multiply) index *= compareNum;
-            else if (compareNum != 0 && !multiply) index /= compareNum;
+            if (compareNum != 0 && add) index += compareNum*primeNumbers[i%pLength];
+            else if (compareNum != 0 && !add) index -= compareNum*primeNumbers[i%pLength];
             
-            if (index == Integer.MAX_VALUE) multiply = false;
+            if (index == Integer.MAX_VALUE) add = false;
             else if (index == 0) {
-                multiply = true;
+                add = true;
                 index = 1;
             }
         }
