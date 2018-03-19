@@ -5,7 +5,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      */
     int numItems = 0;
     private ArrayList<ArrayList<K>> ht;
-    
+    double LF = 0;
 
     public HashTable(int initialCapacity, double loadFactor) {
         ht = new ArrayList<ArrayList<K>>();
@@ -28,6 +28,12 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
             bucket.add(key);
             ht.set(index, bucket);
         }
+        else
+        {
+            ht.get(index).add(key);
+        }
+        numItems++;
+        
         return null;
     }
     
@@ -56,7 +62,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     @Override
     public void clear() {
-       //TODO: Implement this method
+       for(int i = 0; i < ht.size(); i++)
+       {
+           ht.set(i, null);
+       }
     }
 
     @Override
