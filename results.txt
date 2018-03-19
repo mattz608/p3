@@ -1,0 +1,16 @@
+The report name : Performance Analysis Report
+------------------------------------------------------------------------------------------------ 
+|            FileName|      Operation| Data Structure|   Time Taken (micro sec)|     Bytes Used|
+------------------------------------------------------------------------------------------------ 
+|     StringSmall.txt|            PUT|      HASHTABLE|               1210842000|        2700760|
+|     StringSmall.txt|            PUT|        TREEMAP|                683579000|        1337624|
+|     StringSmall.txt|            GET|      HASHTABLE|                770543000|        1337600|
+|     StringSmall.txt|            GET|        TREEMAP|                182125000|             32|
+|     StringSmall.txt|         REMOVE|      HASHTABLE|                744725000|        1337600|
+|     StringSmall.txt|         REMOVE|        TREEMAP|                430638000|             32|
+|     StringLarge.txt|            PUT|      HASHTABLE|             753613792000|      167670200|
+|     StringLarge.txt|            PUT|        TREEMAP|             180251028000|       18664032|
+|     StringLarge.txt|            GET|      HASHTABLE|             635998457000|       72286048|
+|     StringLarge.txt|            GET|        TREEMAP|             103125359000|        5182304|
+|     StringLarge.txt|         REMOVE|      HASHTABLE|             569043235000|      248751944|
+|     StringLarge.txt|         REMOVE|        TREEMAP|              94328289000|        5161672|
